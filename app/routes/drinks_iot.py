@@ -5,7 +5,7 @@ import boto3
 router = APIRouter()
 
 @router.get("/serve/{drink_id}")
-async def read_item(drink_id: int):
+async def read_item(drink_id: str):
     
     try:
         client = boto3.client(
@@ -22,7 +22,7 @@ async def read_item(drink_id: int):
         response = client.publish(
             topic="esp32/sub",
             qos=0,
-            payload="{'message': 'Lo saludamos desde la fastapi'}"
+            payload="{'drink': '"+drink_id+"'}"
         )
     except:
         return JSONResponse(content={"error": "error sending request"}, status_code=500)
