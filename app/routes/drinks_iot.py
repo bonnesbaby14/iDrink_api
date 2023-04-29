@@ -14,7 +14,7 @@ async def read_item(drink_id: str):
         aws_access_key_id='AKIASRAESISWBM7NUMZ6',
         aws_secret_access_key='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'
         )
-    except (error):
+    except Exception as error:
         print(error)
         return JSONResponse(content={"error": "error creating client boto"}, status_code=500)
         
@@ -25,7 +25,7 @@ async def read_item(drink_id: str):
             qos=0,
             payload="{'drink': '"+drink_id+"'}"
         )
-    except(error):
+    except Exception as error:
         print(error)
         return JSONResponse(content={"error": "error sending request"}, status_code=500)
         
