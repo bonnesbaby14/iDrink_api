@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+import os
 
 import boto3
 router = APIRouter()
@@ -11,8 +12,8 @@ async def read_item(drink_id: str):
         client = boto3.client(
         'iot-data',
         region_name='us-east-1',
-        aws_access_key_id='AKIASRAESISWBM7NUMZ6',
-        aws_secret_access_key='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'
+        aws_access_key_id='AKIASRAESISWM5GTTZMU',
+        aws_secret_access_key='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'
         )
     except Exception as error:
         print(error)
