@@ -1,9 +1,11 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+
 import boto3
 router = APIRouter()
 
 @router.get("/serve/{drink_id}")
-async def read_item(drink_id: int, q: str = None):
+async def read_item(drink_id: int):
     
     try:
         client = boto3.client(
@@ -13,7 +15,8 @@ async def read_item(drink_id: int, q: str = None):
         aws_secret_access_key='9hJ895CuBgUc0XonpHeDyvZfHd0ZFplWcE7DDP45'
         )
     except:
-        return {"messege":"error creating client boto"}
+        return JSONResponse(content={"error": "error creating client boto"}, status_code=500)
+        
         
     try:
         response = client.publish(
@@ -22,14 +25,15 @@ async def read_item(drink_id: int, q: str = None):
             payload="{'message': 'Lo saludamos desde la fastapi'}"
         )
     except:
-        return {"messege":"error sending request"}
+        return JSONResponse(content={"error": "error sending request"}, status_code=500)
+        
         
         
     
     
-    return {"drink_id": drink_id, "q": q}
+    return JSONResponse(content={"data": response}, status_code=200)
 
 @router.get("/")
 async def read_item():
-    print("etre")
-    return {"drink_id":"hola"}
+    
+    return JSONResponse(content={"data": "working"}, status_code=200)
