@@ -13,12 +13,12 @@ router = APIRouter()
 
 
 
-class Order(BaseModel):
+class OrderRequest(BaseModel):
     drink: str
     user: str
 
 @router.post("/serve")
-async def store_order(order: Order):
+async def store_order(order: OrderRequest):
     drink = data.get("drink")
     user = data.get("user")
     try:
@@ -55,6 +55,5 @@ async def store_order(order: Order):
 @router.get("/")
 async def read_item():
     orders = session.query(Order).all()
-    if not orders:
-        return JSONResponse(content={"data": []}, status_code=200)
+   
     return JSONResponse(content={"data": jsonable_encoder(orders)}, status_code=200)
