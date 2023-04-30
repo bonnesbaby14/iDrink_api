@@ -7,10 +7,18 @@ from ..database import session
 from ..models import Order
 from typing import Dict
 import boto3
+from pydantic import BaseModel
+
 router = APIRouter()
 
+
+
+class Order(BaseModel):
+    drink: str
+    user: str
+
 @router.post("/serve")
-async def store_order(data: Dict[str, str]):
+async def store_order(order: Order):
     drink = data.get("drink")
     user = data.get("user")
     try:
@@ -35,10 +43,10 @@ async def store_order(data: Dict[str, str]):
         print(error)
         return JSONResponse(content={"error": "error sending request"}, status_code=500)
         
-    order = Order(drink=drink, user=user, created_at=datetime.now())
-    session.add(order)
+    neworder = Order(drink=order.drink, user=order.user, created_at=datetime.now())
+    session.add(neworder)
     session.commit()
-    session.refresh(order)
+    session.refresh(neworder)
         
     
     
