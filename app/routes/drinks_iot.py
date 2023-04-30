@@ -1,12 +1,14 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+from datetime import datetime
 import os
-
+from ..database import session
+from ..models import Order
 import boto3
 router = APIRouter()
 
-@router.get("/serve/{drink_id}")
-async def read_item(drink_id: str):
+@router.post("/serve")
+async def store_order(drink:str, user:str):
     
     try:
         client = boto3.client(
@@ -24,13 +26,16 @@ async def read_item(drink_id: str):
         response = client.publish(
             topic="esp32/sub",
             qos=0,
-            payload="{'drink': '"+drink_id+"'}"
+            payload="{'drink': '"+drink+"'}"
         )
     except Exception as error:
         print(error)
         return JSONResponse(content={"error": "error sending request"}, status_code=500)
         
-        
+    order = Order(drink=drink, user=user, created_at=datetime.now())
+    session.add(order)
+    session.commit()
+    session.refresh(order)
         
     
     
