@@ -36,7 +36,7 @@ async def store_order(order: OrderRequest):
         response = client.publish(
             topic="esp32/sub",
             qos=0,
-            payload="{'drink': '"+drink+"'}"
+            payload="{'drink': '"+str(order.drink)+"'}"
         )
     except Exception as error:
         print(error)
