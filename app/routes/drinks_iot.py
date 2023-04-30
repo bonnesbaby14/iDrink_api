@@ -55,4 +55,6 @@ async def store_order(order: Order):
 @router.get("/")
 async def read_item():
     orders = session.query(Order).all()
+    if not orders:
+        return JSONResponse(content={"data": []}, status_code=200)
     return JSONResponse(content={"data": jsonable_encoder(orders)}, status_code=200)
