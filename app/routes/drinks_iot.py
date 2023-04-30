@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from datetime import datetime
+from fastapi.encoders import jsonable_encoder
 import os
 from ..database import session
 from ..models import Order
@@ -43,5 +44,5 @@ async def store_order(drink:str, user:str):
 
 @router.get("/")
 async def read_item():
-    
-    return JSONResponse(content={"data": "working"}, status_code=200)
+    orders = session.query(Order).all()
+    return JSONResponse(content={"data": jsonable_encoder(orders)}, status_code=200)
