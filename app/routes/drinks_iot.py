@@ -19,8 +19,7 @@ class OrderRequest(BaseModel):
 
 @router.post("/serve")
 async def store_order(order: OrderRequest):
-    drink = data.get("drink")
-    user = data.get("user")
+
     try:
         client = boto3.client(
         'iot-data',
