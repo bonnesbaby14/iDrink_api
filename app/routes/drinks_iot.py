@@ -5,12 +5,14 @@ from fastapi.encoders import jsonable_encoder
 import os
 from ..database import session
 from ..models import Order
+from typing import Dict
 import boto3
 router = APIRouter()
 
 @router.post("/serve")
-async def store_order(drink:str, user:str):
-    
+async def store_order(data: Dict[str, str]):
+    drink = data.get("drink")
+    user = data.get("user")
     try:
         client = boto3.client(
         'iot-data',
