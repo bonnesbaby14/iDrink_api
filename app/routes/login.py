@@ -1,11 +1,7 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
-from datetime import datetime
-from fastapi.encoders import jsonable_encoder
-import os
+
 from ..database import session
 from ..models import User
-
 from pydantic import BaseModel
 from fastapi import status
 from fastapi import HTTPException
