@@ -2,10 +2,10 @@
 -- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 30-04-2023 a las 06:39:03
--- Versión del servidor: 8.0.32-0ubuntu0.20.04.2
--- Versión de PHP: 7.4.3-4ubuntu2.18
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 16, 2023 at 02:54 AM
+-- Server version: 8.0.33-0ubuntu0.20.04.2
+-- PHP Version: 7.4.3-4ubuntu2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,41 +19,49 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `idrink_db`
+-- Database: `idrink_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `orders`
+-- Table structure for table `user`
 --
 
-CREATE TABLE `orders` (
-  `idorder` int NOT NULL,
-  `drink` varchar(20) DEFAULT NULL,
-  `user` varchar(20) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
+CREATE TABLE `user` (
+  `id` int NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `full_name` varchar(300) DEFAULT NULL,
+  `disabled` int DEFAULT '1',
+  `password` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Índices para tablas volcadas
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `full_name`, `disabled`, `password`) VALUES
+(1, 'admin', 'admin admin admin', 1, 'admin');
+
+--
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `orders`
+-- Indexes for table `user`
 --
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`idorder`);
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `orders`
+-- AUTO_INCREMENT for table `user`
 --
-ALTER TABLE `orders`
-  MODIFY `idorder` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `user`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
