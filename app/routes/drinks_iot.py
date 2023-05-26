@@ -24,8 +24,8 @@ async def store_order(order: OrderRequest):
         client = boto3.client(
         'iot-data',
         region_name='us-east-1',
-        aws_access_key_id='AKIASRAESISWBWECP2OV',
-        aws_secret_access_key='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'
+        aws_access_key_id='AKIASRAESISWID4WF6UP',
+        aws_secret_access_key='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'
         )
     except Exception as error:
         print(error)

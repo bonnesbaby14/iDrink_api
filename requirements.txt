@@ -3,3 +3,7 @@ sqlalchemy
 uvicorn
 boto3
 pymysql
+numpy
+pandas
+matplotlib 
+seaborn
