@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 import os
 from ..database import session
 from ..models import Order
+from ..models import Status
 from typing import Dict
 import boto3
 from pydantic import BaseModel
@@ -54,5 +55,29 @@ async def store_order(order: OrderRequest):
 @router.get("/")
 async def read_item():
     orders = session.query(Order).all()
+    status = session.query(Status).all()
+    
    
-    return JSONResponse(content={"data": jsonable_encoder(orders)}, status_code=200)
+    return JSONResponse(content={"data_orders": jsonable_encoder(orders),"data_status":jsonable_encoder(status)}, status_code=200)
+
+
+
+class StatusRequest(BaseModel):
+    bottle1: str
+    bottle2: str
+    bottle3: str
+    bottle4: str
+    
+@router.post("/send_leves")
+async def receive_data(status: StatusRequest):
+    # Realiza las acciones que desees con los valores recibidos
+    # Por ejemplo, puedes almacenarlos en la base de datos
+
+    # En este ejemplo, simplemente los devolveremos como respuesta
+    
+    newstatus = Status(bottle1=status.bottle1, bottle2=status.bottle2, bottle3=status.bottle3,bottle4=status.bottle4,created_at=datetime.now())
+    session.add(newstatus)
+    session.commit()
+    session.refresh(newstatus)
+    
+    return JSONResponse(content={"status": "ready"}, status_code=200)
