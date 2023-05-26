@@ -34,7 +34,7 @@ async def store_order(order: OrderRequest):
         
     try:
         response = client.publish(
-            topic="esp32/sub",
+            topic="IDRINK/sub",
             qos=0,
             payload="{'drink': '"+str(order.drink)+"'}"
         )
