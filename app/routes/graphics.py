@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 import os
 from ..database import session
 from ..models import Status
+from ..models import Order
 from typing import Dict
 import boto3
 from sqlalchemy import desc
@@ -51,5 +52,31 @@ async def read_item():
         image_base64 = base64.b64encode(buffer.getvalue()).decode()
 
         return JSONResponse(content={"data": jsonable_encoder(status), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
+    else:
+        return JSONResponse(content={"message": "No records found"}, status_code=404)
+    
+    
+@router.get("/graphics_orders")
+async def read_item():
+    orders = session.query(Order).all()
+
+    if orders:
+        # Agrupar por usuario y contar tipos de bebidas
+        df = pd.DataFrame([(order.user, order.drink) for order in orders], columns=['User', 'Drink'])
+        grouped_df = df.groupby('User')['Drink'].nunique().reset_index()
+
+        # Generar gráfica de barras
+        ax = grouped_df.plot(x='User', y='Drink', kind='bar')
+        ax.set_xlabel('Usuario')
+        ax.set_ylabel('Cantidad de Bebidas')
+        ax.set_title('Cantidad de Tipos de Bebidas por Usuario')
+
+        # Convertir la gráfica a una imagen en formato Base64
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        return JSONResponse(content={"data": jsonable_encoder(grouped_df), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
     else:
         return JSONResponse(content={"message": "No records found"}, status_code=404)
