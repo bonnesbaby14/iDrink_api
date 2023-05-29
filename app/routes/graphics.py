@@ -27,7 +27,7 @@ async def read_item():
         values = [float(status.bottle1), float(status.bottle2), float(status.bottle3), float(status.bottle4)]
         labels = ['Bottle 1', 'Bottle 2', 'Bottle 3', 'Bottle 4']
 
-        df = pd.DataFrame({'Values': values}, index=labels)
+        df = pd.DataFrame({'Botellas': values}, index=labels)
 
         # Generar gráfica de barras
         ax = df.plot(kind='bar')
@@ -39,6 +39,10 @@ async def read_item():
         colors = ['blue', 'green', 'red', 'yellow']
         for i, bar in enumerate(ax.patches):
             bar.set_color(colors[i % len(colors)])
+
+        # Agregar leyenda con los valores de cada color
+        legend_labels = ['Tequila', 'Vodka', 'Jugo', 'Granadina']
+        ax.legend(legend_labels, loc='upper right')
 
         # Convertir la gráfica a una imagen en formato Base64
         buffer = io.BytesIO()
