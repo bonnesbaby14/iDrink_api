@@ -29,12 +29,16 @@ async def read_item():
 
         df = pd.DataFrame({'Values': values}, index=labels)
 
-        # Generar gráfica de barras con colores personalizados
-        colors = ['blue', 'green', 'red', 'yellow']
-        ax = df.plot(kind='bar', color=colors)
+        # Generar gráfica de barras
+        ax = df.plot(kind='bar')
         ax.set_xlabel('Botellas')
         ax.set_ylabel('mililitros')
         ax.set_title('Niveles de botellas')
+
+        # Asignar colores personalizados a las barras
+        colors = ['blue', 'green', 'red', 'yellow']
+        for i, bar in enumerate(ax.patches):
+            bar.set_color(colors[i % len(colors)])
 
         # Convertir la gráfica a una imagen en formato Base64
         buffer = io.BytesIO()
