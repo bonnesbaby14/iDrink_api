@@ -47,7 +47,7 @@ async def store_order(order: OrderRequest):
     session.add(neworder)
     session.commit()
     session.refresh(neworder)
-        
+    session.close()
     
     
     return JSONResponse(content={"data": response}, status_code=200)
@@ -56,7 +56,7 @@ async def store_order(order: OrderRequest):
 async def read_item():
     orders = session.query(Order).all()
     status = session.query(Status).all()
-    
+    session.close()
    
     return JSONResponse(content={"data_orders": jsonable_encoder(orders),"data_status":jsonable_encoder(status)}, status_code=200)
 
@@ -79,5 +79,6 @@ async def receive_data(status: StatusRequest):
     session.add(newstatus)
     session.commit()
     session.refresh(newstatus)
+    session.close()
     
     return JSONResponse(content={"status": "ready"}, status_code=200)
