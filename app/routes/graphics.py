@@ -65,6 +65,9 @@ async def read_item():
         df = pd.DataFrame([(order.user, order.drink) for order in orders], columns=['User', 'Drink'])
         grouped_df = df.groupby('User')['Drink'].nunique().reset_index()
 
+        # Convertir DataFrame a diccionario
+        data_dict = grouped_df.to_dict(orient='records')
+
         # Generar gráfica de barras
         ax = grouped_df.plot(x='User', y='Drink', kind='bar')
         ax.set_xlabel('Usuario')
@@ -77,6 +80,6 @@ async def read_item():
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-        return JSONResponse(content={"data": jsonable_encoder(grouped_df), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
+        return JSONResponse(content={"data": data_dict, "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
     else:
         return JSONResponse(content={"message": "No records found"}, status_code=404)
