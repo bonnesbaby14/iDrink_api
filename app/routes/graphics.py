@@ -24,7 +24,7 @@ async def read_item():
     status = session.query(Status).order_by(Status.id.desc()).first()
     
     if status:
-        values = [status.bottle1, status.bottle2, status.bottle3, status.bottle4]
+        values = [float(status.bottle1), float(status.bottle2), float(status.bottle3), float(status.bottle4)]
         labels = ['Value 1', 'Value 2', 'Value 3', 'Value 4']
         
         df = pd.DataFrame({'Values': values}, index=labels)
