@@ -61,18 +61,30 @@ async def read_item():
     orders = session.query(Order).all()
 
     if orders:
-        # Agrupar por usuario y contar tipos de bebidas
-        df = pd.DataFrame([(order.user, order.drink) for order in orders], columns=['User', 'Drink'])
-        grouped_df = df.groupby('User')['Drink'].nunique().reset_index()
+        # Crear un diccionario para almacenar la cantidad de bebidas por usuario
+        data = {}
 
-        # Convertir DataFrame a diccionario
-        data_dict = grouped_df.to_dict(orient='records')
+        # Contar la cantidad de bebidas por usuario
+        for order in orders:
+            user = order.user
+            drink = order.drink
 
-        # Generar gráfica de barras
-        ax = grouped_df.plot(x='User', y='Drink', kind='bar')
+            if user in data:
+                if drink in data[user]:
+                    data[user][drink] += 1
+                else:
+                    data[user][drink] = 1
+            else:
+                data[user] = {drink: 1}
+
+        # Convertir el diccionario a un DataFrame
+        df = pd.DataFrame(data).fillna(0)
+
+        # Generar gráfica de barras apiladas
+        ax = df.plot(kind='bar', stacked=True)
         ax.set_xlabel('Usuario')
         ax.set_ylabel('Cantidad de Bebidas')
-        ax.set_title('Cantidad de Tipos de Bebidas por Usuario')
+        ax.set_title('Cantidad de Bebidas por Usuario')
 
         # Convertir la gráfica a una imagen en formato Base64
         buffer = io.BytesIO()
@@ -80,6 +92,6 @@ async def read_item():
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-        return JSONResponse(content={"data": data_dict, "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
+        return JSONResponse(content={"data": jsonable_encoder(data), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
     else:
         return JSONResponse(content={"message": "No records found"}, status_code=404)
