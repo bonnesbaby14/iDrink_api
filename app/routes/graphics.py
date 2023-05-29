@@ -41,6 +41,6 @@ async def read_item():
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode()
         
-        return JSONResponse(content={"data": jsonable_encoder(status), "image_base64": image_base64}, status_code=200)
+        return JSONResponse(content={"data": jsonable_encoder(status), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
     else:
         return JSONResponse(content={"message": "No records found"}, status_code=404)
