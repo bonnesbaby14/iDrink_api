@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 16, 2023 at 12:46 PM
+-- Generation Time: May 29, 2023 at 02:41 AM
 -- Server version: 8.0.33-0ubuntu0.20.04.2
 -- PHP Version: 7.4.3-4ubuntu2.18
 
@@ -34,6 +34,29 @@ CREATE TABLE `orders` (
   `user` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`idorder`, `drink`, `user`, `created_at`) VALUES
+(1, 'tequila_sunrise', 'client1', NULL),
+(2, 'desarmador', 'client1', NULL),
+(3, 'greyhound', 'client1', NULL),
+(4, 'cosmopolitan', 'client1', NULL),
+(5, 'desarmador', 'client2', NULL),
+(6, 'desarmador', 'client2', NULL),
+(7, 'desarmador', 'client2', NULL),
+(8, 'desarmador', 'client2', NULL),
+(9, 'desarmador', 'client2', NULL),
+(10, 'desarmador', 'admin', NULL),
+(11, 'cosmopolitan', 'admin', NULL),
+(12, 'desarmador', 'admin', NULL),
+(13, 'cosmopolitan', 'admin', NULL),
+(14, 'desarmador', 'admin', NULL),
+(15, 'tequila_sunrise', 'admin', NULL),
+(16, 'cosmopolitan', 'admin', NULL),
+(17, 'cosmopolitan', 'admin', NULL);
 
 -- --------------------------------------------------------
 
@@ -76,7 +99,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `full_name`, `disabled`, `password`) VALUES
-(1, 'admin', 'admin admin admin', 1, 'admin');
+(1, 'admin', 'admin admin admin', 1, 'admin'),
+(2, 'client1', 'client1', 1, 'client1'),
+(3, 'client2', 'client2', 1, 'client2');
 
 --
 -- Indexes for dumped tables
@@ -108,7 +133,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `idorder` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idorder` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `status`
@@ -120,7 +145,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
