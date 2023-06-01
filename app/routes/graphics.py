@@ -56,7 +56,7 @@ async def read_item():
         return JSONResponse(content={"message": "No records found"}, status_code=404)
     
     
-@router.get("/graphics_orders")
+@router.get("/graphics_orders_users")
 async def read_item():
     orders = session.query(Order).all()
 
@@ -85,6 +85,42 @@ async def read_item():
         ax.set_xlabel('Usuario')
         ax.set_ylabel('Cantidad de Bebidas')
         ax.set_title('Cantidad de Bebidas por Usuario')
+
+        # Convertir la gráfica a una imagen en formato Base64
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+        return JSONResponse(content={"data": jsonable_encoder(data), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
+    else:
+        return JSONResponse(content={"message": "No records found"}, status_code=404)
+    
+@router.get("/graphics_orders")
+async def read_item():
+    orders = session.query(Order).all()
+
+    if orders:
+        # Crear un diccionario para almacenar la cantidad de bebidas
+        data = {}
+
+        # Contar la cantidad de bebidas
+        for order in orders:
+            drink = order.drink
+
+            if drink in data:
+                data[drink] += 1
+            else:
+                data[drink] = 1
+
+        # Convertir el diccionario a un DataFrame
+        df = pd.DataFrame(data, index=[0])
+
+        # Generar gráfica de barras
+        ax = df.plot(kind='bar')
+        ax.set_xlabel('Bebida')
+        ax.set_ylabel('Cantidad')
+        ax.set_title('Cantidad de Bebidas')
 
         # Convertir la gráfica a una imagen en formato Base64
         buffer = io.BytesIO()
