@@ -150,11 +150,14 @@ async def export_status():
         excel_filename = temp_file.name
         df.to_excel(excel_filename, index=False)
 
+        current_directory = os.getcwd()
+
+        # Mover el archivo temporal al directorio de trabajo actual
+        new_excel_filename = os.path.join(current_directory, "status_data.xlsx")
+        os.rename(excel_filename, new_excel_filename)
+
         # Retornar el archivo de Excel en la respuesta de la API
-        temp_file.flush()  # Asegurarse de que el archivo se guarde en el disco
-        
-        temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
-        return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
+        return FileResponse(new_excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
     
 @router.get("/export_orders")
 async def export_orders():
@@ -170,9 +173,12 @@ async def export_orders():
     with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
         excel_filename = temp_file.name
         df.to_excel(excel_filename, index=False)
+        current_directory = os.getcwd()
+
+        # Mover el archivo temporal al directorio de trabajo actual
+        new_excel_filename = os.path.join(current_directory, "order_data.xlsx")
+        os.rename(excel_filename, new_excel_filename)
 
         # Retornar el archivo de Excel en la respuesta de la API
-        temp_file.flush()
-        temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
-        return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
+        return FileResponse(new_excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='order_data.xlsx')
     
