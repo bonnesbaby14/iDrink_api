@@ -178,5 +178,7 @@ async def export_orders():
     excel_data.seek(0)
 
     # Retornar el archivo de Excel en la respuesta de la API
-    return StreamingResponse(excel_data, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='order_data.xlsx')
+    response = StreamingResponse(iter([excel_data.getvalue()]), media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.headers["Content-Disposition"] = "attachment; filename=order_data.xlsx"
+    return response
     
