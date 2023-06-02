@@ -151,6 +151,8 @@ async def export_status():
         df.to_excel(excel_filename, index=False)
 
         # Retornar el archivo de Excel en la respuesta de la API
+        temp_file.flush()  # Asegurarse de que el archivo se guarde en el disco
+        
         temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
         return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
     
@@ -170,6 +172,7 @@ async def export_orders():
         df.to_excel(excel_filename, index=False)
 
         # Retornar el archivo de Excel en la respuesta de la API
+        temp_file.flush()
         temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
         return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
     
