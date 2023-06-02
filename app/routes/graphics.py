@@ -152,7 +152,7 @@ async def export_status():
 
         # Retornar el archivo de Excel en la respuesta de la API
         temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
-        return FileResponse(temp_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
+        return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
     
 @router.get("/export_orders")
 async def export_orders():
@@ -171,5 +171,5 @@ async def export_orders():
 
         # Retornar el archivo de Excel en la respuesta de la API
         temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
-        return FileResponse(temp_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
+        return FileResponse(temp_file.name, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
     
