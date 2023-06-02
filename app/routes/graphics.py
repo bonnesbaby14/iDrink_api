@@ -14,7 +14,7 @@ from pydantic import BaseModel
 import io
 import base64
 import matplotlib.pyplot as plt
-
+from fastapi.responses import FileResponse
 import tempfile
 router = APIRouter()
 
