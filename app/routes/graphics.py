@@ -23,8 +23,10 @@ router = APIRouter()
 
 @router.get("/status")
 async def read_item():
-    status = session.query(Status.bottle1,Status.bottle2,Status.bottle3,Status.bottle4).order_by(Status.id.desc()).first()
-    return JSONResponse(content={"data": jsonable_encoder(status)})
+    status = session.query(Status).order_by(Status.id.desc()).first()
+    status_dict = jsonable_encoder(status)
+    status_dict.pop('created_at', None)
+    return JSONResponse(content={"data": status_dict})
     
     
 
