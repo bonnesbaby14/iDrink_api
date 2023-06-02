@@ -15,6 +15,7 @@ import io
 import base64
 import matplotlib.pyplot as plt
 
+import tempfile
 router = APIRouter()
 
 
@@ -148,8 +149,12 @@ async def read_item():
     excel_filename = 'status_data.xlsx'
     df.to_excel(excel_filename, index=False)
 
-    # Retornar el nombre del archivo de Excel en la respuesta de la API
-    return JSONResponse(content={"excel_filename": excel_filename}, status_code=200)
+    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
+        excel_filename = temp_file.name
+        df.to_excel(excel_filename, index=False)
+
+    # Retornar el archivo de Excel en la respuesta de la API
+    return FileResponse(excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
     
     
 @router.get("/export_orders")
@@ -163,9 +168,13 @@ async def read_item():
     df = df.drop('_sa_instance_state', axis=1)
 
     # Exportar el DataFrame a un archivo de Excel
-    excel_filename = 'orders_data.xlsx'
-    df.to_excel(excel_filename, index=False)
 
-    # Retornar el nombre del archivo de Excel en la respuesta de la API
-    return JSONResponse(content={"excel_filename": excel_filename}, status_code=200)
+    df.to_excel(excel_filename, index=False)
+# Exportar el DataFrame a un archivo temporal de Excel
+    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
+        excel_filename = temp_file.name
+        df.to_excel(excel_filename, index=False)
+
+    # Retornar el archivo de Excel en la respuesta de la API
+    return FileResponse(excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
     
