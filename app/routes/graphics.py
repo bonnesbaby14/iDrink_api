@@ -146,19 +146,16 @@ async def export_status():
     # Eliminar la columna '_sa_instance_state' que no es necesaria
     df = df.drop('_sa_instance_state', axis=1)
 
-    # Exportar el DataFrame a un archivo temporal de Excel
-    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
-        excel_filename = temp_file.name
-        df.to_excel(excel_filename, index=False)
+    excel_data = io.BytesIO()
+    df.to_excel(excel_data, index=False)
 
-        current_directory = os.getcwd()
+    # Configurar el cursor en el inicio del archivo
+    excel_data.seek(0)
 
-        # Mover el archivo temporal al directorio de trabajo actual
-        new_excel_filename = os.path.join(current_directory, "status_data.xlsx")
-        os.rename(excel_filename, new_excel_filename)
-
-        # Retornar el archivo de Excel en la respuesta de la API
-        return FileResponse(new_excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
+    # Retornar el archivo de Excel en la respuesta de la API
+    response = StreamingResponse(iter([excel_data.getvalue()]), media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.headers["Content-Disposition"] = "attachment; filename=status_data.xlsx"
+    return response
     
 @router.get("/export_orders")
 async def export_orders():
