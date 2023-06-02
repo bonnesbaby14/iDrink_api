@@ -11,6 +11,7 @@ import boto3
 from sqlalchemy import desc
 import pandas as pd
 from pydantic import BaseModel
+from fastapi.responses import StreamingResponse
 import io
 import base64
 import matplotlib.pyplot as plt
@@ -169,16 +170,13 @@ async def export_orders():
     # Eliminar la columna '_sa_instance_state' que no es necesaria
     df = df.drop('_sa_instance_state', axis=1)
 
-    # Exportar el DataFrame a un archivo temporal de Excel
-    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
-        excel_filename = temp_file.name
-        df.to_excel(excel_filename, index=False)
-        current_directory = os.getcwd()
+    # Exportar el DataFrame a un archivo de Excel en memoria
+    excel_data = io.BytesIO()
+    df.to_excel(excel_data, index=False)
 
-        # Mover el archivo temporal al directorio de trabajo actual
-        new_excel_filename = os.path.join(current_directory, "order_data.xlsx")
-        os.rename(excel_filename, new_excel_filename)
+    # Configurar el cursor en el inicio del archivo
+    excel_data.seek(0)
 
-        # Retornar el archivo de Excel en la respuesta de la API
-        return FileResponse(new_excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='order_data.xlsx')
+    # Retornar el archivo de Excel en la respuesta de la API
+    return StreamingResponse(excel_data, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='order_data.xlsx')
     
