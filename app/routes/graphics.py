@@ -136,7 +136,7 @@ async def read_item():
 
 
 @router.get("/export_status")
-async def read_item():
+async def export_status():
     status = session.query(Status).order_by(Status.id.desc()).all()
 
     # Crear el DataFrame a partir de los resultados de la consulta
@@ -145,36 +145,31 @@ async def read_item():
     # Eliminar la columna '_sa_instance_state' que no es necesaria
     df = df.drop('_sa_instance_state', axis=1)
 
-    # Exportar el DataFrame a un archivo de Excel
-    excel_filename = 'status_data.xlsx'
-    df.to_excel(excel_filename, index=False)
-
+    # Exportar el DataFrame a un archivo temporal de Excel
     with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
         excel_filename = temp_file.name
         df.to_excel(excel_filename, index=False)
 
-    # Retornar el archivo de Excel en la respuesta de la API
-    return FileResponse(excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
-    
+        # Retornar el archivo de Excel en la respuesta de la API
+        temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
+        return FileResponse(temp_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='status_data.xlsx')
     
 @router.get("/export_orders")
-async def read_item():
+async def export_orders():
     orders = session.query(Order).all()
 
     # Crear el DataFrame a partir de los resultados de la consulta
-    df = pd.DataFrame.from_records([s.__dict__ for s in orders])
+    df = pd.DataFrame.from_records([order.__dict__ for order in orders])
 
     # Eliminar la columna '_sa_instance_state' que no es necesaria
     df = df.drop('_sa_instance_state', axis=1)
 
-    # Exportar el DataFrame a un archivo de Excel
-
-    df.to_excel(excel_filename, index=False)
-# Exportar el DataFrame a un archivo temporal de Excel
+    # Exportar el DataFrame a un archivo temporal de Excel
     with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=True) as temp_file:
         excel_filename = temp_file.name
         df.to_excel(excel_filename, index=False)
 
-    # Retornar el archivo de Excel en la respuesta de la API
-    return FileResponse(excel_filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
+        # Retornar el archivo de Excel en la respuesta de la API
+        temp_file.seek(0)  # Asegurarse de que el archivo esté en la posición inicial
+        return FileResponse(temp_file, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename='orders_data.xlsx')
     
