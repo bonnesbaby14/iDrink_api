@@ -131,3 +131,41 @@ async def read_item():
         return JSONResponse(content={"data": jsonable_encoder(data), "image_base64": "data:image/png;base64," + image_base64}, status_code=200)
     else:
         return JSONResponse(content={"message": "No records found"}, status_code=404)
+
+
+
+@router.get("/export_status")
+async def read_item():
+    status = session.query(Status).order_by(Status.id.desc()).all()
+
+    # Crear el DataFrame a partir de los resultados de la consulta
+    df = pd.DataFrame.from_records([s.__dict__ for s in status])
+
+    # Eliminar la columna '_sa_instance_state' que no es necesaria
+    df = df.drop('_sa_instance_state', axis=1)
+
+    # Exportar el DataFrame a un archivo de Excel
+    excel_filename = 'status_data.xlsx'
+    df.to_excel(excel_filename, index=False)
+
+    # Retornar el nombre del archivo de Excel en la respuesta de la API
+    return JSONResponse(content={"excel_filename": excel_filename}, status_code=200)
+    
+    
+@router.get("/export_orders")
+async def read_item():
+    orders = session.query(Order).all()
+
+    # Crear el DataFrame a partir de los resultados de la consulta
+    df = pd.DataFrame.from_records([s.__dict__ for s in orders])
+
+    # Eliminar la columna '_sa_instance_state' que no es necesaria
+    df = df.drop('_sa_instance_state', axis=1)
+
+    # Exportar el DataFrame a un archivo de Excel
+    excel_filename = 'orders_data.xlsx'
+    df.to_excel(excel_filename, index=False)
+
+    # Retornar el nombre del archivo de Excel en la respuesta de la API
+    return JSONResponse(content={"excel_filename": excel_filename}, status_code=200)
+    
