@@ -21,6 +21,9 @@ router = APIRouter()
 
 
 
+
+
+
 @router.get("/status")
 async def read_item():
     status = session.query(Status).order_by(Status.id.desc()).first()

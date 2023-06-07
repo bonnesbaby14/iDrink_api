@@ -14,12 +14,18 @@ router = APIRouter()
 
 
 
+
+
+
 class OrderRequest(BaseModel):
     drink: str
     user: str
 
 @router.post("/serve")
 async def store_order(order: OrderRequest):
+
+
+
 
     try:
         client = boto3.client(

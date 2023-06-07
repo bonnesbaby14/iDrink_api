@@ -64,6 +64,10 @@ INSERT INTO `orders` (`idorder`, `drink`, `user`, `created_at`) VALUES
 -- Table structure for table `status`
 --
 
+
+
+
+
 CREATE TABLE `status` (
   `id` int NOT NULL,
   `bottle1` varchar(100) DEFAULT NULL,
