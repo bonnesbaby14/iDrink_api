@@ -17,6 +17,8 @@ RUN ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 # Crea el directorio de trabajo
 WORKDIR /app
 
+
+
 # Copia el archivo de requerimientos
 COPY requirements.txt /app
 # Copia la aplicación
@@ -45,6 +47,8 @@ RUN phpenmod mysqli
 ENV TZ=UTC
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+
 
 # Instala dependencias
 RUN apt-get update && \
