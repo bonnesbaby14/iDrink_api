@@ -7,4 +7,9 @@ numpy
 pandas
 matplotlib 
 seaborn
+pyjwt
+passlib
+fastapi-jwt-auth
 openpyxl
+passlib[bcrypt]
+fastapi-sessions

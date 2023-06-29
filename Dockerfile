@@ -36,10 +36,10 @@ RUN sed -i "s/\$dbserver='localhost';/\$dbserver='127.0.0.1';/" /etc/phpmyadmin/
 
 RUN service mysql start && \
     mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';" && \
-    mysql -u root -p1234 -e "CREATE DATABASE idrink_db;" && \
-    mysql -u root -p1234 idrink_db < idrink_db.sql
+    mysql -u root -p1234 -e "CREATE DATABASE loofinder_db;" && \
+    mysql -u root -p1234 loofinder_db < loofinder_db.sql
 
-
+RUN usermod -d /var/lib/mysql/ mysql
 # Habilita el módulo PHP de Apache
 RUN phpenmod mysqli
 
@@ -75,7 +75,14 @@ EXPOSE 80
 EXPOSE 3306
 EXPOSE 8000
 # Inicia Apache y MySQL en primer plano
-CMD service mysql start && service apache2 start && cd /app && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+CMD service mysql start && \
+    echo "MySQL started" && \
+    service apache2 start && \
+    echo "Apache started" && \
+    cd /app && \
+    echo "Changed directory to /app" && \
+    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
 
 
 
